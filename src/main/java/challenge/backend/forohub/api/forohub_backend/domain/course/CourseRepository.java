@@ -1,5 +1,7 @@
 package challenge.backend.forohub.api.forohub_backend.domain.course;
 
-public interface CourseRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CourseRepository extends JpaRepository<Course, Long>{
 
 }
