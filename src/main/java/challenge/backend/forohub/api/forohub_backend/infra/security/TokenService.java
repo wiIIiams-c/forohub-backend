@@ -2,6 +2,8 @@ package challenge.backend.forohub.api.forohub_backend.infra.security;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,7 @@ public class TokenService {
 
             return JWT.create()
                 .withIssuer("ForoHub")
-                .withSubject(user.getName())
+                .withSubject(user.getEmail())
                 .withClaim("id", user.getId())
                 .withExpiresAt(generateExpirationDate())
                 .sign(algorithm);
@@ -62,6 +64,9 @@ public class TokenService {
     }
 
     private Instant generateExpirationDate(){
-        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("Z"));
+        OffsetDateTime odt = OffsetDateTime.now(ZoneId.systemDefault());
+        ZoneOffset zo = odt.getOffset();
+
+        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of(zo.toString()));
     }
 }
