@@ -16,11 +16,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter{
-    @Autowired
     private TokenService tokenService;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -30,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter{
         if(authHeader != null){
             var token = authHeader.replace("Bearer ", "");
             var subject = tokenService.verifyToken(token);
-
+            
             if(subject != null){
                 var user = userRepository.findByEmail(subject);
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
