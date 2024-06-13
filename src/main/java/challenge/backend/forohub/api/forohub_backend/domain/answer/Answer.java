@@ -29,12 +29,12 @@ public class Answer {
     private String answer;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
     private LocalDateTime creationDate;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author;    
     private String solution;
 }
