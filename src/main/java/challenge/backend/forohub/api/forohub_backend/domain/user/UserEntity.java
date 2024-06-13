@@ -8,9 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import challenge.backend.forohub.api.forohub_backend.domain.answer.Answer;
 import challenge.backend.forohub.api.forohub_backend.domain.profile.Profile;
-import challenge.backend.forohub.api.forohub_backend.domain.topic.Topic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +18,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -49,11 +46,11 @@ public class UserEntity implements UserDetails{
     )
     private Set<Profile> profiles;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Topic> topics;
+    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // private Set<Topic> topics;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Answer> answers;
+    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // private Set<Answer> answers;
 
     public UserEntity(String name, String email, String password, Set<Profile> profile){
         this.name = name;
