@@ -1,21 +1,16 @@
 package challenge.backend.forohub.api.forohub_backend.domain.topic;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import challenge.backend.forohub.api.forohub_backend.domain.answer.Answer;
 import challenge.backend.forohub.api.forohub_backend.domain.course.Course;
 import challenge.backend.forohub.api.forohub_backend.domain.user.UserEntity;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -42,13 +37,23 @@ public class Topic {
     private Boolean status;
     
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author;
     
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "course_id", nullable = false)
     private Course course;
+    private Integer answers;
+    // @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // private Set<Answer> answers;
 
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Answer> answers;
+    public Topic(String title, String message, LocalDateTime creationDate, UserEntity userEntity, Course course){
+        this.title = title;
+        this.message = message;
+        this.creationDate = creationDate;
+        this.author = userEntity;
+        this.course = course;
+        this.answers = 0;
+        this.status = false;
+    }
 }
