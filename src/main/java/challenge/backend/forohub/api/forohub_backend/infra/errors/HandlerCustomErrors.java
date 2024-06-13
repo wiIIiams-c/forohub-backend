@@ -1,10 +1,14 @@
 package challenge.backend.forohub.api.forohub_backend.infra.errors;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import jakarta.validation.ValidationException;
 
 @RestControllerAdvice
 public class HandlerCustomErrors {
@@ -15,9 +19,19 @@ public class HandlerCustomErrors {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity handleSqlIntegritiConstraint(SQLIntegrityConstraintViolationException e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity handleValidationException(ValidationException e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
     private record DataValidationError(String field, String error){
         public DataValidationError(FieldError fieldError){
-            this(fieldError.getField(), fieldError.getDefaultMessage())
-;        }
+            this(fieldError.getField(), fieldError.getDefaultMessage());
+        }
     }
 }
