@@ -24,6 +24,11 @@ public class HandlerCustomErrors {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
+    @ExceptionHandler(IntegrityValidation.class)
+    public ResponseEntity handleIntegrityValidation(Exception e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity handleValidationException(ValidationException e){
         return ResponseEntity.badRequest().body(e.getMessage());
