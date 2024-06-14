@@ -3,7 +3,7 @@ package challenge.backend.forohub.api.forohub_backend.domain.validations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import challenge.backend.forohub.api.forohub_backend.domain.topic.DataNewTopic;
+import challenge.backend.forohub.api.forohub_backend.domain.topic.DataTopic;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.TopicRepository;
 import jakarta.validation.ValidationException;
 
@@ -14,8 +14,8 @@ public class TopicExistance implements TopicValidations{
 
     @Override
     public void validateTopic(Object data) {
-        if(data instanceof DataNewTopic){
-            DataNewTopic dnt = (DataNewTopic) data;
+        if(data instanceof DataTopic){
+            DataTopic dnt = (DataTopic) data;
 
             if(dnt.title() == null || dnt.message() == null || dnt.author() == null || dnt.course() == null){
                 return;
