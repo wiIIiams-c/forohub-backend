@@ -44,8 +44,6 @@ public class Topic {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
     private Integer answers;
-    // @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    // private Set<Answer> answers;
 
     public Topic(String title, String message, LocalDateTime creationDate, UserEntity userEntity, Course course){
         this.title = title;
@@ -55,5 +53,19 @@ public class Topic {
         this.course = course;
         this.answers = 0;
         this.status = false;
+    }
+
+    public void updateTopic(DataTopic dataTopic, Course course){
+        if(dataTopic.title() != null){
+            this.title = dataTopic.title();
+        }
+
+        if(dataTopic.message() != null){
+            this.message = dataTopic.message();
+        }
+
+        if(course != null){
+            this.course = course;
+        }
     }
 }
