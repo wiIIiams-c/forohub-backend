@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import challenge.backend.forohub.api.forohub_backend.domain.course.Course;
 import challenge.backend.forohub.api.forohub_backend.domain.course.CourseRepository;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.DataTopic;
+import challenge.backend.forohub.api.forohub_backend.domain.topic.DataTopicList;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.DataSavedTopic;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.Topic;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.TopicRepository;
@@ -63,6 +66,11 @@ public class TopicService {
             throw new IntegrityValidation("El topic a actualizar no ha sido encontrado...");
         }
         
+        //que el id del autor sea el mismo del topic
+        if(!topicRepository.findByIdAndAuthorId(id, dataUpdateTopic.author()).isPresent()){
+            throw new IntegrityValidation("El autor no corresponde al topic a actualizar...");
+        }
+
         //que los titulos y mensajes no sean iguales
         topicValidations.forEach(tv -> tv.validateTopic(dataUpdateTopic));
 
@@ -74,7 +82,25 @@ public class TopicService {
         Topic updateTopic = topicRepository.getReferenceById(id);
         updateTopic.updateTopic(dataUpdateTopic, methodCourse);
 
+        //retorna datos actualizados, excepto fecha de creacion
         return updateTopic;
+    }
+
+    public String deleteTopic(Long id){
+        //exista el id
+        if(!topicRepository.findById(id).isPresent()){
+            throw new IntegrityValidation("El topic a eliminar no ha sido encontrado...");
+        }
+
+        //eliminar topic
+        topicRepository.deleteById(id);
+
+        //mensaje de que ha sido eliminado
+        return "El topic ha sido eliminado...";
+    }
+
+    public Page<DataTopicList> listTopic(Pageable pageable){
+        return topicRepository.findAll(pageable).map(DataTopicList::new);
     }
 
     private Course getSelectedCourse(DataTopic data){
