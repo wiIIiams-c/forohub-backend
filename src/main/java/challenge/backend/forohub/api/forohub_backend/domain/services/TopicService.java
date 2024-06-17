@@ -103,6 +103,15 @@ public class TopicService {
         return topicRepository.findAll(pageable).map(DataTopicList::new);
     }
 
+    public DataTopicList detailTopic(@Valid Long id) {
+        //exista el id
+        if(!topicRepository.findById(id).isPresent()){
+            throw new IntegrityValidation("El topic a consultar no ha sido encontrado...");
+        }
+
+        return new DataTopicList(topicRepository.getReferenceById(id));
+    }
+
     private Course getSelectedCourse(DataTopic data){
         if(!courseRepository.findById(data.course()).isPresent()){
             throw new IntegrityValidation("El curso ingresado es invalido...");

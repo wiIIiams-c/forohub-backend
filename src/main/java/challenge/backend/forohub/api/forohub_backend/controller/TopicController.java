@@ -60,4 +60,9 @@ public class TopicController {
     public ResponseEntity<Page<DataTopicList>> topicAll(@PageableDefault(size = 10, sort = "creationDate", direction = Direction.ASC) Pageable pageable){
         return ResponseEntity.ok(topicService.listTopic(pageable));
     }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity tipicDetail(@PathVariable @Valid Long id){
+        return ResponseEntity.ok(topicService.detailTopic(id));
+    }
 }
