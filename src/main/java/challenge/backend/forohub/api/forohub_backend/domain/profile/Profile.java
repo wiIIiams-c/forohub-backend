@@ -2,6 +2,8 @@ package challenge.backend.forohub.api.forohub_backend.domain.profile;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import challenge.backend.forohub.api.forohub_backend.domain.user.UserEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class Profile {
     private Long id;
     private String name;
 
+    @JsonIgnore //previene problema inifinite recursion en el json
     @ManyToMany(mappedBy = "profiles")
     private Set<UserEntity> users;
 }
