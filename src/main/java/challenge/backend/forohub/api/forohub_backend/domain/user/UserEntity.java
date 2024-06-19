@@ -59,17 +59,17 @@ public class UserEntity implements UserDetails{
         this.active = false;
     }
 
-    public void updateUser(DataRegisterUser dataRegisterUser) {
-        if(dataRegisterUser.name() != null){
-            this.name = dataRegisterUser.name();
+    public void updateUser(String nameIn, String emailIn, String passwordIn) {
+        if(nameIn != null){
+            this.name = nameIn;
         }
 
-        if(dataRegisterUser.email() != null){
-            this.email = dataRegisterUser.email();
+        if(emailIn != null){
+            this.email = emailIn;
         }
 
-        if(dataRegisterUser.password() != null){
-            this.password = dataRegisterUser.password();
+        if(passwordIn != null){
+            this.password = passwordIn;
         }
     }
 
