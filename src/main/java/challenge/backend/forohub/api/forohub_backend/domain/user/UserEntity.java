@@ -37,6 +37,7 @@ public class UserEntity implements UserDetails{
     private String name;
     private String email;
     private String password;
+    private Boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -46,17 +47,30 @@ public class UserEntity implements UserDetails{
     )
     private Set<Profile> profiles;
 
-    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    // private Set<Topic> topics;
-
-    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    // private Set<Answer> answers;
-
     public UserEntity(String name, String email, String password, Set<Profile> profile){
         this.name = name;
         this.email = email;
         this.password = password;
+        this.active = true;
         this.profiles = profile;
+    }
+
+    public void deactivateUser(){
+        this.active = false;
+    }
+
+    public void updateUser(DataRegisterUser dataRegisterUser) {
+        if(dataRegisterUser.name() != null){
+            this.name = dataRegisterUser.name();
+        }
+
+        if(dataRegisterUser.email() != null){
+            this.email = dataRegisterUser.email();
+        }
+
+        if(dataRegisterUser.password() != null){
+            this.password = dataRegisterUser.password();
+        }
     }
 
     @Override
@@ -91,6 +105,6 @@ public class UserEntity implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.active;
     }
 }
