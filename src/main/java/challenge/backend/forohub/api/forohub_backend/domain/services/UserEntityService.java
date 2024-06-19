@@ -1,6 +1,5 @@
 package challenge.backend.forohub.api.forohub_backend.domain.services;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +66,16 @@ public class UserEntityService {
         }
         
         //validar que el correo no exista
-        //validar campos vacios
+        if(userRepository.existsByEmail(dataRegisterUser.email()).booleanValue()){
+            throw new IntegrityValidation("El correo ya existe...");
+        }
         
         UserEntity userEntity = userRepository.getReferenceById(id);
-        userEntity.updateUser(dataRegisterUser);
+        userEntity.updateUser(
+            dataRegisterUser.name(),
+            dataRegisterUser.email(),
+            passwordEncoder.encode(dataRegisterUser.password())
+        );
 
         return userEntity;
     }
