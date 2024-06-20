@@ -135,3 +135,9 @@ GET
 GET
 /topics/detail/id
 ```
+
+## Alura Challenge Forohub Badge
+
+<p align="center" width="100%">
+    <img width="50%" src="https://storage.googleapis.com/media-github-readme/Badge-Spring.png">
+</p>
