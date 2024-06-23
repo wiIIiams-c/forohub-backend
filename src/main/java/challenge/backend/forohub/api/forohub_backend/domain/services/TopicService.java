@@ -66,7 +66,7 @@ public class TopicService {
             throw new IntegrityValidation("El topic a actualizar no ha sido encontrado...");
         }
         
-        //que el id del autor sea el mismo del topic
+        //que el id del autor sea el mismo del topic via sql
         if(!topicRepository.findByIdAndAuthorId(id, dataUpdateTopic.author()).isPresent()){
             throw new IntegrityValidation("El autor no corresponde al topic a actualizar...");
         }
@@ -87,10 +87,15 @@ public class TopicService {
     }
 
     public String deleteTopic(Long id){
+        var topicToDelete = topicRepository.findById(id);
+
         //exista el id
-        if(!topicRepository.findById(id).isPresent()){
+        if(!topicToDelete.isPresent()){
             throw new IntegrityValidation("El topic a eliminar no ha sido encontrado...");
         }
+
+        //valida que el autor sea el mismo del topic a eliminar via custom validation
+        topicValidations.forEach(tv -> tv.validateTopic(topicToDelete.get().getAuthor().getId()));
 
         //eliminar topic
         topicRepository.deleteById(id);
