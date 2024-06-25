@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import challenge.backend.forohub.api.forohub_backend.domain.topic.Topic;
 import challenge.backend.forohub.api.forohub_backend.domain.user.UserEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,8 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "message")
     private String answer;
 
     @ManyToOne
@@ -36,5 +39,14 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author;    
-    private String solution;
+    private Boolean solution;
+
+    //Constructor para crear una respuesta
+    public Answer(String answer, LocalDateTime creationDate, Topic topic, UserEntity author){
+        this.answer = answer;
+        this.creationDate = creationDate;
+        this.topic = topic;
+        this.author = author;
+        this.solution = false;
+    }
 }
