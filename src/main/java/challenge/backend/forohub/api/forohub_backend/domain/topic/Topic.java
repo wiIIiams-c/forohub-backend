@@ -52,7 +52,7 @@ public class Topic {
         this.author = userEntity;
         this.course = course;
         this.answers = 0;
-        this.status = false;
+        this.status = true;
     }
 
     public void updateTopic(DataTopic dataTopic, Course course){
@@ -67,5 +67,10 @@ public class Topic {
         if(course != null){
             this.course = course;
         }
+    }
+
+    //cerrara un topic y no se podra responder
+    public void closeTopic(){
+        this.status = false;
     }
 }
