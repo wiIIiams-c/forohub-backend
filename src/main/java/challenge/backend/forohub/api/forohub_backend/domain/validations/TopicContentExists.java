@@ -8,7 +8,7 @@ import challenge.backend.forohub.api.forohub_backend.domain.topic.TopicRepositor
 import jakarta.validation.ValidationException;
 
 @Component
-public class TopicExistance implements TopicValidations{
+public class TopicContentExists implements TopicValidations{
     @Autowired
     private TopicRepository topicRepository;
 
