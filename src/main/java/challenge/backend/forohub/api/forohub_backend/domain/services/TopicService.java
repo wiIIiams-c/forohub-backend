@@ -62,7 +62,7 @@ public class TopicService {
     public Topic updateTopic(Long id, @Valid DataTopic dataUpdateTopic) {
         //que no venga nada null -> ya lo valida en el record DataTopic
         //exista el id
-        if(!topicRepository.findById(id).isPresent()){
+        if(!topicRepository.existsById(id)){
             throw new IntegrityValidation("El topic a actualizar no ha sido encontrado...");
         }
         
@@ -110,7 +110,7 @@ public class TopicService {
 
     public DataTopicList detailTopic(@Valid Long id) {
         //exista el id
-        if(!topicRepository.findById(id).isPresent()){
+        if(!topicRepository.existsById(id)){
             throw new IntegrityValidation("El topic a consultar no ha sido encontrado...");
         }
 
@@ -118,7 +118,7 @@ public class TopicService {
     }
 
     private Course getSelectedCourse(DataTopic data){
-        if(!courseRepository.findById(data.course()).isPresent()){
+        if(!courseRepository.existsById(data.course())){
             throw new IntegrityValidation("El curso ingresado es invalido...");
         }
 
@@ -126,7 +126,7 @@ public class TopicService {
     }
 
     private UserEntity getSelectedUser(DataTopic data){
-        if(!userRepository.findById(data.author()).isPresent()){
+        if(!userRepository.existsById(data.author())){
             throw new IntegrityValidation("El usuario ingresado es invalido...");
         }
 
