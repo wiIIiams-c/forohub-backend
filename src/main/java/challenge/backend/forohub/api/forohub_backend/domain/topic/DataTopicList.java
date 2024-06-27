@@ -6,18 +6,20 @@ public record DataTopicList(
     String title,
     String message,
     LocalDateTime creationDate,
-    Boolean status,
+    String status,
     String author,
-    String course
+    String course,
+    Integer answers
 ) {
     public DataTopicList(Topic topic){
         this(
             topic.getTitle(),
             topic.getMessage(),
             topic.getCreationDate(),
-            topic.getStatus(),
+            topic.getStatus().booleanValue()?"Active":"Closed",
             topic.getAuthor().getName(),
-            topic.getCourse().getName()
+            topic.getCourse().getName(),
+            topic.getAnswers()
         );
     }
 }
