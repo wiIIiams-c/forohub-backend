@@ -2,6 +2,7 @@ package challenge.backend.forohub.api.forohub_backend.domain.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +10,14 @@ import org.springframework.stereotype.Service;
 import challenge.backend.forohub.api.forohub_backend.domain.answer.Answer;
 import challenge.backend.forohub.api.forohub_backend.domain.answer.AnswerRepository;
 import challenge.backend.forohub.api.forohub_backend.domain.answer.DataAnswer;
+import challenge.backend.forohub.api.forohub_backend.domain.answer.DataAnswerUpdate;
 import challenge.backend.forohub.api.forohub_backend.domain.answer.DataSavedAnswer;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.Topic;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.TopicRepository;
 import challenge.backend.forohub.api.forohub_backend.domain.user.UserEntity;
 import challenge.backend.forohub.api.forohub_backend.domain.user.UserRepository;
 import challenge.backend.forohub.api.forohub_backend.domain.validations.AnswerValidations;
+import challenge.backend.forohub.api.forohub_backend.domain.validations.GeneralValidations;
 import challenge.backend.forohub.api.forohub_backend.domain.validations.TopicValidations;
 import challenge.backend.forohub.api.forohub_backend.infra.errors.IntegrityValidation;
 import jakarta.validation.Valid;
@@ -26,15 +29,17 @@ public class AnswerService {
     private UserRepository userRepository;
     private List<AnswerValidations> answerValidations;
     private List<TopicValidations> topicValidations;
+    private List<GeneralValidations> generalValidations;
 
     @Autowired
     public AnswerService(TopicRepository topicRepository, AnswerRepository answerRepository, UserRepository userRepository, 
-                            List<AnswerValidations> answerValidations, List<TopicValidations> topicValidations) {
+                        List<AnswerValidations> answerValidations, List<TopicValidations> topicValidations, List<GeneralValidations> generalValidations) {
         this.topicRepository = topicRepository;
         this.answerRepository = answerRepository;
         this.userRepository = userRepository;
         this.answerValidations = answerValidations;
         this.topicValidations = topicValidations;
+        this.generalValidations = generalValidations;
     }
     
     public DataSavedAnswer addNewAnswer(@Valid DataAnswer dataAnswer) {
@@ -73,5 +78,68 @@ public class AnswerService {
         }
 
         return userRepository.getReferenceById(data.author());
+    }
+
+    public String solutionAnswer(@Valid Long id) {        
+        if(id == null){
+            throw new IntegrityValidation("Ha ocurrido un problema con los parametros enviados...");
+        }
+
+        if(!answerRepository.existsById(id)){
+            throw new IntegrityValidation("La respuesta a marcar no existe...");
+        }
+
+        var answerData = answerRepository.getReferenceById(id);
+        var topicData = topicRepository.getReferenceById(answerData.getTopic().getId());
+
+        //valida si la respuesta ya esta marcada como solucion
+        answerValidations.forEach(av -> av.validateAnswer(answerData));
+
+        //verificar que el usuario que marca solucion sea creador del topic
+        topicValidations.forEach(tv -> tv.validateTopic(topicData));
+
+        //se marca la respuesta como solucion
+        answerData.markSolution();
+
+        return "Se ha marcado la respuesta como solucion...";
+    }
+
+    public String deleteAnswer(@Valid Long id) {
+        if(id == null){
+            throw new IntegrityValidation("Ha ocurrido un problema con los parametros enviados...");
+        }
+
+        if(!answerRepository.existsById(id)){
+            throw new IntegrityValidation("La respuesta a eliminar no existe...");
+        }
+        
+        var answerData = answerRepository.getReferenceById(id);
+
+        generalValidations.forEach(gv -> gv.validateGeneral(answerData));
+        answerValidations.forEach(av -> av.validateAnswer(answerData));
+
+        answerRepository.deleteById(id);        
+        
+        return "La respuesta ha sido eliminada...";
+    }
+
+    public Answer updateAnswer(@Valid DataAnswerUpdate dataAnswerUpdate) {
+        if(dataAnswerUpdate.idAnswer() == null){
+            throw new IntegrityValidation("Ha ocurrido un problema con los parametros enviados...");
+        }
+
+        if(!answerRepository.existsById(dataAnswerUpdate.idAnswer())){
+            throw new IntegrityValidation("La respuesta a actualizar no existe...");
+        }
+
+        Answer answerUpdated = answerRepository.getReferenceById(dataAnswerUpdate.idAnswer());
+
+        generalValidations.forEach(gv -> gv.validateGeneral(answerUpdated));
+        answerValidations.forEach(av -> av.validateAnswer(answerUpdated));
+        answerValidations.forEach(av -> av.validateAnswer(dataAnswerUpdate));
+
+        answerUpdated.updateAnswer(dataAnswerUpdate);
+
+        return answerUpdated;
     }
 }
