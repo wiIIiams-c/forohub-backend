@@ -17,6 +17,7 @@ import challenge.backend.forohub.api.forohub_backend.domain.topic.Topic;
 import challenge.backend.forohub.api.forohub_backend.domain.topic.TopicRepository;
 import challenge.backend.forohub.api.forohub_backend.domain.user.UserEntity;
 import challenge.backend.forohub.api.forohub_backend.domain.user.UserRepository;
+import challenge.backend.forohub.api.forohub_backend.domain.validations.GeneralValidations;
 import challenge.backend.forohub.api.forohub_backend.domain.validations.TopicValidations;
 import challenge.backend.forohub.api.forohub_backend.infra.errors.IntegrityValidation;
 import jakarta.validation.Valid;
@@ -27,14 +28,16 @@ public class TopicService {
     private UserRepository userRepository;
     private CourseRepository courseRepository;
     private List<TopicValidations> topicValidations;
+    private List<GeneralValidations> generalValidations;
 
     @Autowired
     public TopicService(TopicRepository topicRepository, UserRepository userRepository,
-            CourseRepository courseRepository, List<TopicValidations> topicValidations) {
+            CourseRepository courseRepository, List<TopicValidations> topicValidations, List<GeneralValidations> generalValidations) {
         this.topicRepository = topicRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
         this.topicValidations = topicValidations;
+        this.generalValidations = generalValidations;
     }
 
     public DataSavedTopic addNewTopic(DataTopic dataNewTopic) {
@@ -66,6 +69,9 @@ public class TopicService {
             throw new IntegrityValidation("El topic a actualizar no ha sido encontrado...");
         }
         
+        //valida que el autor sea el mismo del topic a eliminar via custom validation
+        //generalValidations.forEach(gv -> gv.validateGeneral(topicToDelete.get()));
+
         //que el id del autor sea el mismo del topic via sql
         if(!topicRepository.findByIdAndAuthorId(id, dataUpdateTopic.author()).isPresent()){
             throw new IntegrityValidation("El autor no corresponde al topic a actualizar...");
@@ -95,7 +101,10 @@ public class TopicService {
         }
 
         //valida que el autor sea el mismo del topic a eliminar via custom validation
-        topicValidations.forEach(tv -> tv.validateTopic(topicToDelete.get().getAuthor().getId()));
+        generalValidations.forEach(gv -> gv.validateGeneral(topicToDelete.get()));
+
+        //valida que el topic no este cerrado
+        //topicValidations.forEach(tv -> tv.validateTopic(topicToDelete.get()));
 
         //eliminar topic
         topicRepository.deleteById(id);
