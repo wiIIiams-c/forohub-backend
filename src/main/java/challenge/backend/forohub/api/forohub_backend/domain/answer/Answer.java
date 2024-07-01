@@ -49,4 +49,15 @@ public class Answer {
         this.author = author;
         this.solution = false;
     }
+
+    public void updateAnswer(DataAnswerUpdate dataAnswerUpdate){
+        if(dataAnswerUpdate.newMessage() != null){
+            this.answer = dataAnswerUpdate.newMessage();
+        }
+    }
+
+    //metodo para marcar la respuesta como solucionada
+    public void markSolution(){
+        this.solution = true;
+    }
 }
