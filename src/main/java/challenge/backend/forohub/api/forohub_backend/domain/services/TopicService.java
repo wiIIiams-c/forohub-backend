@@ -126,6 +126,25 @@ public class TopicService {
         return new DataTopicList(topicRepository.getReferenceById(id));
     }
 
+    public String closeTopic(@Valid Long id) {
+        if(id == null){
+            throw new IntegrityValidation("Ha ocurrido un problema con el paramatro enviado...");
+        }
+
+        if(!topicRepository.existsById(id)){
+            throw new IntegrityValidation("El topic a cerrar no ha sido encontrado...");
+        }
+
+        var topicData = topicRepository.getReferenceById(id);
+
+        generalValidations.forEach(gv -> gv.validateGeneral(topicData));
+        topicValidations.forEach(tv -> tv.validateTopic(topicData));
+
+        topicData.closeTopic();
+
+        return "Se ha cerradp el topic";
+    }
+
     private Course getSelectedCourse(DataTopic data){
         if(!courseRepository.existsById(data.course())){
             throw new IntegrityValidation("El curso ingresado es invalido...");

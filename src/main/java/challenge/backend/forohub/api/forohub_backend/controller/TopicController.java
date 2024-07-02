@@ -65,4 +65,12 @@ public class TopicController {
     public ResponseEntity tipicDetail(@PathVariable @Valid Long id){
         return ResponseEntity.ok(topicService.detailTopic(id));
     }
+
+    @PutMapping("/close/{id}")
+    @Transactional
+    public ResponseEntity topicClose(@PathVariable @Valid Long id){
+        var closedTopic = topicService.closeTopic(id);
+
+        return ResponseEntity.ok(closedTopic);
+    }
 }
