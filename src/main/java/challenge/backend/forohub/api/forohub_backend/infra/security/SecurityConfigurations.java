@@ -26,6 +26,7 @@ public class SecurityConfigurations {
             .sessionManagement(m -> m.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(ar -> ar
             .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+            .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
             .anyRequest().authenticated())
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
