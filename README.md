@@ -41,103 +41,10 @@ Deberas agregar las siguientes variables de entorno para que la aplicacion pueda
 
 ## Aplicación
 
-### Usuarios
-
-#### *Registrar*
-```json
-POST
-/api/auth/register
-
-{
-    "name": "Tu Nombre",
-    "email": "Tu Email",
-    "password": "Tu Password"
-}
-```
-
-#### *Login*
-```json
-POST
-/api/auth/login
-
-{
-    "email": "Tu Email",
-    "password": "Tu Password"
-}
-```
-
-#### *Listar Usuarios*
-```json
-GET
-/users
-```
-
-#### *Detalle de un Usuario*
-```json
-DEL
-/users/id
-```
-
-#### *Actualizar Usuario*
-```json
-PUT
-/users/id
-
-{
-    "name": "Tu nuevo nombre",
-    "email": "Tu nuevo correo",
-    "password": "Tu nueva password"
-}
-```
-
-### Topicos
-
-#### *Agregar Topico*
-```json
-POST
-/topics
-
-{
-    "title":"Tu Titulo",
-    "message":"Tu Mensaje",
-    "author":id del usuario,
-    "course":id del curso
-}
-```
-
-#### *Actualizar Topico*
-```json
-PUT
-/topics/id
-
-{
-    "title":"Tu Nuevo Titulo",
-    "message":"Tu Nuevo Mensaje",
-    "author":id del usuario,
-    "course":id del nuevo curso
-}
-```
-
-#### *Eliminar Topico*
-```json
-DEL
-/topics/id
-```
-
-#### *Listar Topicos*
-```json
-GET
-/topics
-```
-
-#### *Listar Topico Especifico*
-```json
-GET
-/topics/detail/id
-```
+Para revisar cada endpoint puedes ejecutar la aplicacion y luego dirigirte a la siguiente url http://localhost:8080/swagger-ui/index.html para ver la documentacion de la API
 
 ## Alura Challenge Forohub Badge
 
 <p align="center" width="100%">
-    <img width="50%" src="https://storage.googleapis.com/media-github-readme/Badge-Spring.png">
+    <img width="50%" src="https://1drv.ms/i/c/16c4ec9011a16f89/IQPyGPPD-1oLQ4KuN29Tu6pNASilhwQoTSvsM6txfep9B94">
 </p>
