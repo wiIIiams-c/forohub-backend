@@ -2,6 +2,7 @@ package challenge.backend.forohub.api.forohub_backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import challenge.backend.forohub.api.forohub_backend.domain.services.AnswerServi
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/answers")
 public class AnswerController {
