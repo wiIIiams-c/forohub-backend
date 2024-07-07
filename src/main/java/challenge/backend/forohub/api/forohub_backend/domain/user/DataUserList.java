@@ -1,21 +1,23 @@
 package challenge.backend.forohub.api.forohub_backend.domain.user;
 
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
 
 import challenge.backend.forohub.api.forohub_backend.domain.profile.Profile;
 
 public record DataUserList(
     String name,
     String status,
-    @JsonIgnoreProperties("id") Set<Profile> profiles
+    List<String> profiles,
+    int qtyCreatedTopics,
+    int qtyAnsweredTopics
 ) {
     public DataUserList(UserEntity userEntity){
         this(
             userEntity.getName(),
             Boolean.TRUE.equals(userEntity.getActive())?"Active":"Inactive",
-            userEntity.getProfiles()
+            userEntity.getProfiles().stream().map(Profile::getName).toList(),
+            userEntity.getTopics().size(),
+            userEntity.getAnswers().size()
         );
     }
 }
