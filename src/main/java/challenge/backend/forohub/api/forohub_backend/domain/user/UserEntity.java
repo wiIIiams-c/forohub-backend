@@ -1,6 +1,7 @@
 package challenge.backend.forohub.api.forohub_backend.domain.user;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -84,7 +85,13 @@ public class UserEntity implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        this.profiles.forEach(p -> {
+            authorities.add(new SimpleGrantedAuthority(p.getName()));
+        });
+
+        return authorities;
     }
 
     @Override
