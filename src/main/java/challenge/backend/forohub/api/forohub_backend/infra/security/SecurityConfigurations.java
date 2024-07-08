@@ -28,8 +28,9 @@ public class SecurityConfigurations {
             .csrf(c -> c.disable())
             .sessionManagement(m -> m.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(ar -> ar
-            .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-            .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/users/{id}", "/topics/{id}").hasRole("ADM")
             .anyRequest().authenticated())
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
